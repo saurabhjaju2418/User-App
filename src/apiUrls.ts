@@ -1,0 +1,1 @@
+export const home = "assets/data.json";

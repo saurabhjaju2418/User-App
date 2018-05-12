@@ -1,0 +1,18 @@
+[
+    {
+       "id":"1",
+       "name":"Amol Dhagdi",
+       "email":"amoldhagdi@gmail.com",
+       "address":"karve nager",
+       "birthday":"11/11/1991",
+       "gender":"Male"
+    },
+    {
+       "id":"2",
+       "name":"Amol Pande",
+       "email":"amoldhagdi@gmail.com",
+       "address":"karve nager",
+       "birthday":"11/11/1991",
+       "gender":"Male"
+    }
+ ]
