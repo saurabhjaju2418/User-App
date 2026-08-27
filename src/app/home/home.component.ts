@@ -1,27 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { home } from '../../apiUrls';
 import { HttpClient } from '@angular/common/http';
-import { Router } from "@angular/router";
+import { Component, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { User } from '../user.model';
 
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
-})
-export class HomeComponent implements OnInit {
-  userDatails: any;
+@Component({ selector: 'app-home', imports: [FormsModule, RouterLink], templateUrl: './home.component.html' })
+export class HomeComponent {
+  private readonly http = inject(HttpClient);
+  readonly users = signal<User[]>([]);
+  readonly query = signal('');
+  readonly filteredUsers = computed(() => { const q = this.query().trim().toLowerCase(); return q ? this.users().filter(user => Object.values(user).some(value => value.toLowerCase().includes(q))) : this.users(); });
 
-  constructor(private http: HttpClient, private router: Router) {
-
-  }
-
-  ngOnInit() {
-    this.http.get(home).subscribe(data => {
-      this.userDatails = data;
-    });
-  }
-
-  navigates(id) {
-    this.router.navigate(['/details', id]);
-  }
+  constructor() { this.http.get<User[]>('/assets/data.json').subscribe(users => this.users.set(users)); }
 }

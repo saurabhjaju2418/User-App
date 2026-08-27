@@ -1,31 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { home } from '../../apiUrls';
 import { HttpClient } from '@angular/common/http';
-import _ from 'lodash';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { switchMap } from 'rxjs';
+import { User } from '../user.model';
 
-@Component({
-  selector: 'app-details',
-  templateUrl: './details.component.html',
-  styleUrls: ['./details.component.css']
-})
-export class DetailsComponent implements OnInit {
-  user: any;
-  constructor(private http: HttpClient, private activatedRoute: ActivatedRoute) {
-    this.user = {};
-  }
+@Component({ selector: 'app-details', imports: [FormsModule, RouterLink], templateUrl: './details.component.html' })
+export class DetailsComponent {
+  private readonly http = inject(HttpClient);
+  private readonly route = inject(ActivatedRoute);
+  readonly user = signal<User | undefined>(undefined);
+  readonly saved = signal(false);
 
-  ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      this.http.get(home).subscribe(data => {
-        this.user = _.find(data, function (u: any) { return u.id == params.id; });
-      });
-    });
-  }
-
-  save(){
-    console.log(this.user);
-    
-  }
-
+  constructor() { this.route.paramMap.pipe(switchMap(params => this.http.get<User[]>('/assets/data.json').pipe())).subscribe(users => this.user.set(users.find(user => user.id === this.route.snapshot.paramMap.get('id')))); }
+  save(): void { this.saved.set(true); }
 }

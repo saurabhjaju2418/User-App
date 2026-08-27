@@ -1,15 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-  title = 'app';
-
-  constructor(private http: HttpClient){
-  }
-
-}
+@Component({ selector: 'app-root', imports: [RouterLink, RouterOutlet], templateUrl: './app.component.html', styleUrl: './app.component.css' })
+export class AppComponent {}
